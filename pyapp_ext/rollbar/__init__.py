@@ -9,7 +9,13 @@ import sys
 from pathlib import Path
 
 import rollbar
-from pyapp.app import get_running_application, CommandOptions, CommandGroup, argument, KeyValueAction
+from pyapp.app import (
+    get_running_application,
+    CommandOptions,
+    CommandGroup,
+    argument,
+    KeyValueAction,
+)
 from pyapp.conf import settings
 
 
@@ -48,8 +54,13 @@ def _monkeypatch_exception_report():
     app = get_running_application()
     default_report = app.exception_report
 
-    def rollbar_exception_report(exception: BaseException, opts: CommandOptions):
-        rollbar.report_exc_info(sys.exc_info(), extra_data=opts.__dict__)
+    def rollbar_exception_report(
+        exception: BaseException, opts: CommandOptions
+    ):
+        rollbar.report_exc_info(
+            sys.exc_info(),
+            payload_data={"framework": "pyApp"},
+        )
         return default_report(exception, opts)
 
     app.exception_report = rollbar_exception_report
@@ -64,17 +75,23 @@ class Extension:
     checks = ".checks"
 
     @staticmethod
+    @argument("MESSAGE")
     @argument("DATA", nargs="+", action=KeyValueAction)
-    @argument("-m", "--message", default="Sample Message")
-    @argument("-l", "--level", default="debug", choices=('critical', 'error', 'warning', 'info', 'debug'))
+    @argument(
+        "-l",
+        "--level",
+        default="debug",
+        choices=("critical", "error", "warning", "info", "debug"),
+    )
     async def message(opts: CommandOptions):
         """
         Report a message to rollbar
         """
         rollbar.report_message(
-            opts.message,
+            opts.MESSAGE,
             level=opts.level,
-            extra_data=opts.DATA
+            extra_data=opts.DATA,
+            payload_data={"framework": "pyApp"},
         )
 
     @staticmethod
