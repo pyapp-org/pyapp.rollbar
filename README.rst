@@ -8,9 +8,15 @@ pyApp - Rollbar
    :target: https://github.com/ambv/black
       :alt: Once you go Black...
 
-Integration with Rollbar_ error tracking. Provides both access to a Rollbar
-client and integration with the toplevel error handler to capture unhandled
-exceptions.
+Integration with Rollbar_ error tracking. The extension provides the following
+features.
+
+Initialise Client
+    On startup of the application the client is configured ready for use.
+
+Top-Level Error Reporting
+    Register a top level exception handler to catch any exceptions that are not
+    handled by the application
 
 .. _Rollbar: https://rollbar.com/
 
@@ -23,12 +29,20 @@ Install using *pip*::
     pip install pyapp.rollbar
 
 
+Configuration
+-------------
+
+Settings can be provided in one of two ways, via the `ROLLBAR` settings key or
+via the `ROLLBAR_ACCESS_TOKEN` and `ENVIRONMENT` environment variables.
+
+
 Usage
 =====
 
-Add a rollbar entry into settings:
+Rollbar itself is a singleton available from the `rollbar` module. eg
 
 .. code-block:: python
 
-  ROLLBAR = {
-  }
+    import rollbar
+
+    rollbar.report_message("Hi!")
