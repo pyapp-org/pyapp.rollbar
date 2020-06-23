@@ -6,7 +6,7 @@ Register Rollbar as the exception reporter.
 """
 
 ROLLBAR = {
-    "access_token": None,
+    "access_token": os.getenv("ROLLBAR_ACCESS_TOKEN"),
     "environment": os.getenv("ENVIRONMENT", "production"),
 }
 """
