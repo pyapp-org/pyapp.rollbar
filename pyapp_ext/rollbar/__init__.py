@@ -66,7 +66,7 @@ class Extension:
     @staticmethod
     @argument("DATA", nargs="+", action=KeyValueAction)
     @argument("-m", "--message", default="Sample Message")
-    @argument("-l", "--level", default="info", choices=('critical', 'error', 'warning', 'info', 'debug'))
+    @argument("-l", "--level", default="debug", choices=('critical', 'error', 'warning', 'info', 'debug'))
     async def message(opts: CommandOptions):
         """
         Report a message to rollbar
